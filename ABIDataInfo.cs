@@ -1,8 +1,8 @@
 ﻿namespace APIData
 {
-    public class APIDataInfo
+    public class ABIDataInfo
     {
-        public APIDataInfo(int num_points, int num_bases)
+        public ABIDataInfo(int num_points, int num_bases)
         {
             NPoints = num_points;
             NBases = num_bases;

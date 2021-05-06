@@ -9,20 +9,25 @@ namespace APIData
     {
         const float XSlice = 7.5f; // X轴刻度宽度
         const float XSpace = 0;
-        const float YSpace = 25;
+        const float YSpace = 40;
         const float YSliceBegin = 0;
         const float YSliceValue = 20; //Y轴刻度的数值宽度
         const float YSlice = 20; //Y轴刻度宽度
+
+        const int Height = 100;
 
         static readonly Brush colorG = new SolidBrush(Color.FromArgb(0, 0, 0));
         static readonly Brush colorT = new SolidBrush(Color.FromArgb(255, 0, 0));
         static readonly Brush colorC = new SolidBrush(Color.FromArgb(0, 0, 255));
         static readonly Brush colorA = new SolidBrush(Color.FromArgb(0, 255, 0));
         static readonly Font font = new Font("Arial", 8f);
+        static readonly Font fontIndex = new Font("Arial", 6f);
 
-        public static void ShowGen(Graphics g, List<GenViewMode> ps)
+        public static void ShowGen(Graphics g, List<GenViewMode> ps, int index)
         {
-            Rectangle r = new Rectangle(0, 0, 1125, 300);
+            int y = index * (Height + 10);
+
+            Rectangle r = new Rectangle(0, (index - 1) * (Height + 10), 1510, Height);
 
             g.FillRectangle(Brushes.White, r);
             for (int i = 0; i < ps.Count; ++i)
@@ -31,54 +36,54 @@ namespace APIData
                 switch (gen)
                 {
                     case "A":
-                        g.DrawString(gen, font, colorA, 0 + i * 15, g.VisibleClipBounds.Height - 22);
+                        g.DrawString(gen, font, colorA, i * 15, y - 37);
                         break;
                     case "C":
-                        g.DrawString(gen, font, colorC, 0 + i * 15, g.VisibleClipBounds.Height - 22);
+                        g.DrawString(gen, font, colorC, i * 15, y - 37);
                         break;
                     case "G":
-                        g.DrawString(gen, font, colorG, 0 + i * 15, g.VisibleClipBounds.Height - 22);
+                        g.DrawString(gen, font, colorG, i * 15, y - 37);
                         break;
                     case "T":
-                        g.DrawString(gen, font, colorT, 0 + i * 15, g.VisibleClipBounds.Height - 22);
+                        g.DrawString(gen, font, colorT, i * 15, y - 37);
                         break;
                 }
 
-                if (i >= 73)
-                    break;
+                if (i > 0 && (i + 1) % 10 == 0)
+                {
+                    g.DrawString(((index - 1) * 100 + i + 1).ToString(), fontIndex, colorG, i * 15, y - 22);
+                }
             }
 
-            DrawContent(g, ps.Select((p) => p.ProbA).ToArray(), colorA);
-            DrawContent(g, ps.Select((p) => p.ProbC).ToArray(), colorC);
-            DrawContent(g, ps.Select((p) => p.ProbG).ToArray(), colorG);
-            DrawContent(g, ps.Select((p) => p.ProbT).ToArray(), colorT);
+            DrawContent(g, ps.Select((p) => p.ProbA).ToArray(), colorA, y);
+            DrawContent(g, ps.Select((p) => p.ProbC).ToArray(), colorC, y);
+            DrawContent(g, ps.Select((p) => p.ProbG).ToArray(), colorG, y);
+            DrawContent(g, ps.Select((p) => p.ProbT).ToArray(), colorT, y);
         }
 
         /// <summary>
         /// 画曲线
         /// </summary>
         /// <param name="objGraphics"></param>
-        private static void DrawContent(Graphics objGraphics, byte[] fltCurrentValues, Brush clrCurrentColor)
+        private static void DrawContent(Graphics objGraphics, byte[] fltCurrentValues, Brush clrCurrentColor, float y)
         {
             Pen CurvePen = new Pen(clrCurrentColor, 1);
             PointF[] CurvePointF = new PointF[fltCurrentValues.Length * 2 + 1];
-            float keys = 0;
-            float values = 0;
-            CurvePointF[0] = new PointF(XSpace, objGraphics.VisibleClipBounds.Height - 25);
+            CurvePointF[0] = new PointF(XSpace, y - YSpace);
             for (int i = 0; i < fltCurrentValues.Length; i++)
             {
-                keys = XSlice * (i * 2 + 1) + XSpace;
-                values = (objGraphics.VisibleClipBounds.Height - YSpace) + YSliceBegin - YSlice * (fltCurrentValues[i] / YSliceValue);
+                float keys = XSlice * (i * 2 + 1) + XSpace;
+                float values = (y - YSpace) + YSliceBegin - YSlice * (fltCurrentValues[i] / YSliceValue);
 
                 CurvePointF[i * 2 + 1] = new PointF(keys, values);
-                CurvePointF[i * 2 + 2] = new PointF(XSlice * (i * 2 + 2) + XSpace, (objGraphics.VisibleClipBounds.Height - YSpace) + YSliceBegin);
+                CurvePointF[i * 2 + 2] = new PointF(XSlice * (i * 2 + 2) + XSpace, (y - YSpace) + YSliceBegin);
             }
 
             for (int i = 2; i < CurvePointF.Length - 1; i += 2)
             {
-                float sum = objGraphics.VisibleClipBounds.Height * 2 - CurvePointF[i + 1].Y - CurvePointF[i - 1].Y;
+                float sum = y * 2 - CurvePointF[i + 1].Y - CurvePointF[i - 1].Y;
 
-                CurvePointF[i].Y = objGraphics.VisibleClipBounds.Height - ((25.0f / sum - 0.5f) * 0.3f + 0.5f) * sum + 0.2352f * Math.Abs(CurvePointF[i + 1].Y - CurvePointF[i - 1].Y);
+                CurvePointF[i].Y = y - ((YSpace / sum - 0.5f) * 0.3f + 0.5f) * sum + 0.2352f * Math.Abs(CurvePointF[i + 1].Y - CurvePointF[i - 1].Y);
             }
 
             objGraphics.DrawCurve(CurvePen, CurvePointF, 0.5f);

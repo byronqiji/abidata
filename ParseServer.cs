@@ -41,7 +41,7 @@ namespace APIData
 
         private FileStream fs;
 
-        public APIDataInfo DataInfo { get; set; }
+        public ABIDataInfo DataInfo { get; set; }
 
         long header_fudge = 0;
 
@@ -79,7 +79,7 @@ namespace APIData
                 numBases = 0;
             }
 
-            DataInfo = new APIDataInfo(numPoints, numBases);
+            DataInfo = new ABIDataInfo(numPoints, numBases);
             if (GetABIIndexEntryLW(indexO, FWO_Label, 1, 5, ref fwo_) == 0)
                 fwo_ = 0x43414754;
 
