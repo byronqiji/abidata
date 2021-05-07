@@ -1,30 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
-namespace APIData
+namespace ABIData
 {
-    public partial class ABIData : Form
+    public partial class ABI : Form
     {
         ParseServer ps;
         Bitmap bm;
 
-        public ABIData()
+        public ABI()
         {
             InitializeComponent();
-
-            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
-
-            //SetStyle(ControlStyles.UserPaint, true);
-            //SetStyle(ControlStyles.AllPaintingInWmPaint, true); // 禁止擦除背景.  
-            //SetStyle(ControlStyles.DoubleBuffer, true); // 双缓冲
-            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-
-            //Type t = panGen.GetType();
-            //PropertyInfo pi = t.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            //pi.SetValue(panGen, true, null);
         }
 
         private void btnFilePath_Click(object sender, EventArgs e)
@@ -40,9 +28,18 @@ namespace APIData
 
         private void btnParse_Click(object sender, EventArgs e)
         {
+            btnParse.Enabled = false;
             ps = new ParseServer(txtFilePath.Text);
             ps.Parse();
-            btnParse.Enabled = false;
+
+            TraceConvert tc = new TraceConvert(ps.DataInfo);
+            tc.Noneg();
+            //tc.SetBaseLine();
+            tc.SubtractBackgroud();
+            tc.SetMax();
+            tc.ScaleHeight();
+            //tc.Skip();
+            tc.ScaleTrace(70);
 
             DrawGenBitmap();
             //ShowGen();
@@ -56,11 +53,12 @@ namespace APIData
             panGen.Height = (ps.DataInfo.Bases.Length / 100 + 1) * 110 + 100;
 
             bm = new Bitmap(panGen.Width, panGen.Height);
+
             using (Graphics g = Graphics.FromImage(bm))
             {
                 List<GenViewMode> genList = new List<GenViewMode>();
                 int i = 0;
-                for (; i < ps.DataInfo.Bases.Length; ++i)
+                for (; i < ps.DataInfo.NBases; ++i)
                 {
                     if (i % 100 == 0)
                     {
@@ -80,7 +78,12 @@ namespace APIData
                         ProbA = ps.DataInfo.Prob_A[i],
                         ProbC = ps.DataInfo.Prob_G[i],
                         ProbG = ps.DataInfo.Prob_C[i],
-                        ProbT = ps.DataInfo.Prob_T[i]
+                        ProbT = ps.DataInfo.Prob_T[i],
+
+                        TraceA = ps.DataInfo.ShowTraceA[i],
+                        TraceC = ps.DataInfo.ShowTraceC[i],
+                        TraceG = ps.DataInfo.ShowTraceG[i],
+                        TraceT = ps.DataInfo.ShowTraceT[i]
                     });
                 }
 

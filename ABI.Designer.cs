@@ -1,9 +1,9 @@
 ﻿
 using System.Windows.Forms;
 
-namespace APIData
+namespace ABIData
 {
-    partial class ABIData
+    partial class ABI
     {
         /// <summary>
         ///  Required designer variable.
@@ -35,8 +35,7 @@ namespace APIData
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.btnFilePath = new System.Windows.Forms.Button();
             this.btnParse = new System.Windows.Forms.Button();
-            //this.panGen = new System.Windows.Forms.Panel();
-            this.panGen = new ABIData.GenPanel();
+            this.panGen = new ABIData.ABI.GenPanel();
             this.SuspendLayout();
             // 
             // labFilePath
@@ -81,7 +80,7 @@ namespace APIData
             // 
             this.panGen.Location = new System.Drawing.Point(12, 44);
             this.panGen.Name = "panGen";
-            this.panGen.Size = new System.Drawing.Size(1593, 741);
+            this.panGen.Size = new System.Drawing.Size(1602, 741);
             this.panGen.TabIndex = 4;
             // 
             // ABIData
@@ -109,13 +108,14 @@ namespace APIData
         private System.Windows.Forms.TextBox txtFilePath;
         private System.Windows.Forms.Button btnFilePath;
         private System.Windows.Forms.Button btnParse;
-        private System.Windows.Forms.Panel panGen;
+        private GenPanel panGen;
 
         private class GenPanel : Panel
         {
             public GenPanel()
             {
-                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
+                this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
+                //SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
             }
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace APIData
+namespace ABIData
 {
     public class GensDrawing
     {
@@ -11,8 +11,8 @@ namespace APIData
         const float XSpace = 0;
         const float YSpace = 40;
         const float YSliceBegin = 0;
-        const float YSliceValue = 20; //Y轴刻度的数值宽度
-        const float YSlice = 20; //Y轴刻度宽度
+        const float YSliceValue = 1; //Y轴刻度的数值宽度
+        const float YSlice = 1; //Y轴刻度宽度
 
         const int Height = 100;
 
@@ -49,23 +49,29 @@ namespace APIData
                         break;
                 }
 
-                if (i > 0 && (i + 1) % 10 == 0)
+                if (i > 0 && (i + 1) % 5 == 0)
                 {
                     g.DrawString(((index - 1) * 100 + i + 1).ToString(), fontIndex, colorG, i * 15, y - 22);
                 }
             }
 
-            DrawContent(g, ps.Select((p) => p.ProbA).ToArray(), colorA, y);
-            DrawContent(g, ps.Select((p) => p.ProbC).ToArray(), colorC, y);
-            DrawContent(g, ps.Select((p) => p.ProbG).ToArray(), colorG, y);
-            DrawContent(g, ps.Select((p) => p.ProbT).ToArray(), colorT, y);
+            //DrawContent(g, ps.Select((p) => p.ProbA).ToArray(), colorA, y);
+            //DrawContent(g, ps.Select((p) => p.ProbC).ToArray(), colorC, y);
+            //DrawContent(g, ps.Select((p) => p.ProbG).ToArray(), colorG, y);
+            //DrawContent(g, ps.Select((p) => p.ProbT).ToArray(), colorT, y);
+
+            DrawContent(g, ps.Select((p) => p.TraceA).ToArray(), colorA, y);
+            DrawContent(g, ps.Select((p) => p.TraceC).ToArray(), colorC, y);
+            DrawContent(g, ps.Select((p) => p.TraceG).ToArray(), colorG, y);
+            DrawContent(g, ps.Select((p) => p.TraceT).ToArray(), colorT, y);
         }
 
         /// <summary>
         /// 画曲线
         /// </summary>
         /// <param name="objGraphics"></param>
-        private static void DrawContent(Graphics objGraphics, byte[] fltCurrentValues, Brush clrCurrentColor, float y)
+        //private static void DrawContent(Graphics objGraphics, byte[] fltCurrentValues, Brush clrCurrentColor, float y)
+        private static void DrawContent(Graphics objGraphics, ushort[] fltCurrentValues, Brush clrCurrentColor, float y)
         {
             Pen CurvePen = new Pen(clrCurrentColor, 1);
             PointF[] CurvePointF = new PointF[fltCurrentValues.Length * 2 + 1];

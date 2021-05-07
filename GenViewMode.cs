@@ -1,4 +1,4 @@
-﻿namespace APIData
+﻿namespace ABIData
 {
     public class GenViewMode
     {
@@ -11,5 +11,13 @@
         public byte ProbG { get; set; }
 
         public byte ProbT { get; set; }
+
+        public ushort TraceA { get; set; }
+
+        public ushort TraceC { get; set; }
+
+        public ushort TraceG { get; set; }
+
+        public ushort TraceT { get; set; }
     }
 }

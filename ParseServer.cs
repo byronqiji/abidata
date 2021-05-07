@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace APIData
+namespace ABIData
 {
     public class ParseServer
     {
@@ -186,8 +185,9 @@ namespace APIData
                     }
                 }
                 DataInfo.Bases[DataInfo.Bases.Length - 1] = ' ';
-
             }
+
+            GetABIint2(indexO, BasePosEntryLabel, 1, DataInfo.BasePos, DataInfo.NBases);
 
             fs.Close();
         }
@@ -207,6 +207,7 @@ namespace APIData
 
             byte[] buffer = new byte[max_data_len * 2];
             len = GetABIint1(indexO, label, count, buffer, max_data_len * 2);
+            string x = Encoding.ASCII.GetString(buffer);
             if (-1 == len)
                 return -1;
 

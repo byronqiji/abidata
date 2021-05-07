@@ -1,4 +1,4 @@
-﻿namespace APIData
+﻿namespace ABIData
 {
     public class ABIDataInfo
     {
@@ -56,7 +56,7 @@
         public int Format { get; set; }      /* Trace file format */
         public string Trace_name { get; set; }  /* Trace file name */
 
-        public int NPoints { get; private set; }    /* No. of points of data */
+        public int NPoints { get; set; }    /* No. of points of data */
         public int NBases { get; private set; }      /* No. of bases */
 
         /* Traces */
@@ -64,6 +64,12 @@
         public ushort[] TraceC { get; set; }      /* Array of length `NPoints' */
         public ushort[] TraceG { get; set; }      /* Array of length `NPoints' */
         public ushort[] TraceT { get; set; }      /* Array of length `NPoints' */
+
+        public ushort[] ShowTraceA { get; set; }
+        public ushort[] ShowTraceC { get; set; }
+        public ushort[] ShowTraceG { get; set; }
+        public ushort[] ShowTraceT { get; set; }
+
         public ushort MaxTraceVal { get; set; } /* The maximal value in any trace */
         public int Baseline { get; set; }    /* The zero offset for TRACE values */
 
